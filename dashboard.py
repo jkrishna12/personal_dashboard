@@ -60,9 +60,9 @@ if st.session_state['t212_input'] != '':
         
         with dashboard_col1_1:
             
-            st.write(f"**Account Value:** £{account_val}")
-            st.write(f"**Portfolio Value:** £{portfolio_val}")
-            st.write(f"**Cash:** £{cash}")   
+            st.write(f"**Account Value:** £{account_val:.2f}")
+            st.write(f"**Portfolio Value:** £{portfolio_val:.2f}")
+            st.write(f"**Cash:** £{cash:.2f}")   
         
         with dashboard_col1_2:
             
