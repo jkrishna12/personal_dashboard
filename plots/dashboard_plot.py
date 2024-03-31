@@ -67,14 +67,14 @@ def pie_plot_plotly(df, label):
         fig: plotly Figure, general/detailed pie chart figure
     """
     
-    fig = go.Figure(data = go.Pie(values = df['pct'],
+    fig = go.Figure(data = go.Pie(values = df['currentPos'],
                                labels = df[label],
                                hole = 0.5,
                               pull = np.full(len(df), 0.1),
                               showlegend = False))
     
     fig.update_traces(textinfo = 'label+percent',
-                  hoverinfo = 'label+percent')
+                  hoverinfo = 'label+value')
     
     if label == 'shortName':
         title = 'Detailed'
@@ -117,11 +117,7 @@ def pie_balance_breakdown(portfolio_df, crypto_df, etoro_cash, balance_df, optio
     # concatenate the balance_df_concat with the portfolio_df
     account_df = pd.concat([portfolio_df, crypto_df, balance_df_concat])
     
-    account_val = account_df['currentPos'].sum()
-    
     if option == 'Detailed':
-        # calculate the percentage of each holding and round to 2dp
-        account_df['pct'] = np.round((account_df['currentPos'] / account_val) * 100,2)
     
         # sort values and reset index
         account_df = account_df.sort_values('currentPos', ascending = False)
@@ -135,10 +131,7 @@ def pie_balance_breakdown(portfolio_df, crypto_df, etoro_cash, balance_df, optio
     elif option == 'General':
         # group the instruments by the type
         account_df_groupby = account_df.groupby('type')['currentPos'].sum().reset_index()
-        
-        # calculate the percentage of each instrument type and round to 2dp
-        account_df_groupby['pct'] = np.round((account_df_groupby['currentPos'] / account_val) * 100,2)
-        
+       
         instrument_fig = pie_plot_plotly(account_df_groupby, 'type')
         
         return instrument_fig
